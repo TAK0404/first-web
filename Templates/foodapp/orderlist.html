@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+	{% load static %}
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/imperial_style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/master.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/specific-style.css' %}" />
+    <script src="{% static 'js/rating.js' %}" defer></script>
+    <link href="https://fonts.googleapis.com/css?family=Caveat:700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Bevan&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Caveat:400,700&subset=cyrillic" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <title>Sizzle | Order History</title>
+	<link rel="shortcut icon" href="{% static 'images/favico.png' %}" type="image/x-icon">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="position: fixed;width:100%;background-image: linear-gradient(180deg,#FFF,#FFF);box-shadow: 0px 0px 7px 0px #404040;">
+      <a class="navbar-brand" href="/"><h2 style="color:black;font-family:sans-serif;font-weight:bolder;"><b>Sizzle</b></h2></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav" style="margin-left:auto!important;margin-right:30px;">
+          <li class="nav-item active">
+            <a class="nav-link" id="nav-link" href="home">Home <span class="sr-only">(current)</span></a>
+          </li>
+          {% if request.session.CustId is None and request.session.AdminId is not None %}
+          <li class="nav-item active">
+            <a class="nav-link" id="nav-link" href="addfoods">Add Food <span class="sr-only">(current)</span></a>
+          </li>
+          {% endif %}
+          <li class="nav-item active">
+            <a class="nav-link" id="nav-link" href="allfood">Food Menu <span class="sr-only">(current)</span></a>
+          </li>
+          {% if request.session.CustId is None and request.session.AdminId is None %}
+          <li class="nav-item active">
+            <a class="nav-link" id="nav-link" href="addcustomer">Register <span class="sr-only">(current)</span></a>
+          </li>
+          {% endif %}
+          {% if request.session.CustId is None and request.session.AdminId is None %}
+          <li class="nav-item active">
+            <a class="nav-link" id="nav-link" href="login">Login <span class="sr-only">(current)</span></a>
+          </li>
+          {% endif %}
+          {% if request.session.CustId is not None and request.session.AdminId is None %}
+          <li class="nav-item active">
+            <a class="nav-link" id="nav-link" href="allcart"><i class="fas fa-shopping-cart" style="font-size:20px;"></i> Cart <span class="sr-only">(current)</span></a>
+          </li>
+          {% endif %}
+          {% if request.session.CustId is not None or request.session.AdminId is not None %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="far fa-user-circle" style="font-size:20px;color:black;"></i>&nbsp;My Account
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			{% if request.session.CustId is not None and request.session.AdminId is None %}
+              <a class="dropdown-item" href="getcustomer">Edit Profile</a>
+            <div class="dropdown-divider"></div>
+         
+              <a class="dropdown-item" href="orders"><i class="fas fa-history" style="font-size:20px;"></i>&nbsp;&nbsp;Order History</a>
+            <div class="dropdown-divider"></div>
+			  {% endif %}
+              <a class="dropdown-item" style="background:red;width:1;border-radius:4px;" href="logout"><i class="fas fa-sign-out-alt" style="font-size:20px;color:white;"></i>&nbsp;&nbsp;<font color="white">Logout</font></a>
+            </div>
+          </li>
+          
+          {% endif %}
+        </ul>	
+
+      </div>
+    </nav>
+
+    <main style="margin-top:80px;">
+      <form action="orders" method="post">
+        {% csrf_token %}
+        {% for o in orderlist %}
+        <div class="entry-box" style="background:#FFF;position: static;width:35%;margin-left: 7.5%;float:left;box-shadow:1px 1px 5px;margin-bottom:10px;">
+          <span style="color:black;margin-left:5%;"><span style="font-size:14px; font-family:'Sriracha', cursive;">Order ID: <b style="letter-spacing: 3px;color: grey;font-family:'Sriracha', cursive;">{{o.OrderId}}</b></span><br /><b style="font-size:20px;font-family:'Sriracha', cursive; "><i style="font-family:'Sriracha', cursive;margin-left: 5%;">{{o.OrderDate}}</i></b>
+  <br />
+  <tr>
+  <td><b style="font-family:'Sriracha', cursive;margin-left: 5%;">Bill:  </b></td><td>{{o.TotalBill}}</td><br /><td><b style="font-family:'Sriracha', cursive;margin-left: 5%;">Total:  </b></td><td id="tlp" style="color:black;margin-left: 5%; "></td>
+  </tr><a href="#" style="font-family:'Sriracha', cursive;">Invoice</a>
+          </span>
+          <div>
+            <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+            {% if new_comment %}
+            <div class="alert alert-success" role="alert">Your comment is awaiting moderation</div>
+            {% else %}
+            <h5 class="entry-box" style="margin-left: 5%;">Leave a comment</h5>
+            <form id = "orderID" method="post" style="margin-top: 1.3em;">
+              {% csrf_token %}
+              <div class="input-group flex-nowrap" style="font-family:'Sriracha', cursive; width: 90%; margin: 5%;">
+                <span class="input-group-text" id="addon-wrapping" style="font-family:'Sriracha', cursive;">Name: </span>
+                <input type="text" id="name"  name ="name" class="form-control" placeholder="" aria-label="Username" aria-describedby="addon-wrapping">
+              </div>
+              <div class="input-group flex-nowrap" style="font-family:'Sriracha', cursive; width: 90%; margin: 5%;">
+                <span class="input-group-text" id="addon-wrapping1" style="font-family:'Sriracha', cursive;">Email: </span>
+                <input type="text" id="email" name ="email" class="form-control" placeholder="" aria-label="Email" aria-describedby="addon-wrapping">
+              </div>
+              <div class="input-group flex-nowrap" style="font-family:'Sriracha', cursive; width: 90%; margin: 5%;">
+                <span class="input-group-text" id="addon-wrapping2" style="font-family:'Sriracha', cursive;">Body: </span>
+                <textarea rows="3" maxlength="300" type="text" id="body" name ="body" class="form-control" placeholder="" aria-label="Body" aria-describedby="addon-wrapping" style="resize: none;"></textarea>
+              </div>
+              {% csrf_token %}
+              <div class="container text-center">
+                <div class="row" >
+                  <div class="col-4" style="font-family:'Sriracha', cursive;">Rating products</div>
+                  <div class="col-1"><span class="fa fa-star checked" id="first"></span></div>
+                  <div class="col-1"><span class="fa fa-star checked" id="second"></span></div>
+                  <div class="col-1"><span class="fa fa-star checked" id="third"></span></div>
+                  <div class="col-1"><span class="fa fa-star" id="fourth"></span></div>
+                  <div class="col-1"><span class="fa fa-star" id="fifth"></span></div>
+                </div>
+              </div>
+              <button id="button" type="submit" class="btn btn1-primary btn-sm" name="button" style="font-family: sans-serif; float: right; margin-right: 20px; margin-bottom: 10px; margin-top: 20px;">Register</button>
+              {% block javascript %}
+              <script>
+
+                $("#orderID").submit(function(e){
+
+                  e.preventDefault();
+                  var serializedData = $(this).serialize();
+                  $.ajax({
+                      type:'POST',
+                      url: "{% url 'order' %}",
+                      data: serializedData,
+                      success: function(response){
+                        $("#orderID").trigger('reset');
+                      },
+                    });
+                });
+              </script>
+              {% endblock javascript %}
+            </form>
+            {% endif %}
+          </div>
+          
+        </div>  
+        {% endfor %}
+      </form>
+      
+	  
+    </main>
+    <footer style="margin: 0;">
+      <div class="foot-con">
+        <div class="fo-cont-1">
+            SIZZLE
+        </div>
+        <div class="fo-cont-2">
+          <a class="ext-link" href="#">Home</a> |
+            <a class="ext-link" href="#">About us</a> |
+              <a class="ext-link" href="#">Privacy Policy</a> |
+                <a class="ext-link" href="#">Terms & Conditions</a>
+        </div>
+        <div class="fo-cont-3">
+          Name:	Mr Truong Anh Khoi<br />
+Phone:	0900000000<br />
+Company:	Teky<br />
+Address: Hai Ba Trung, Hoan Kiem, Ha Noi
+        </div>
+      </div><hr style="background-color: grey;margin-top:0px;"/>Made with HTML & CSS.<br/>
+      Made by Certified <b> Web Design</b> Teky<br />
+      ©<script type="text/javascript">var creditsyear = new Date();document.write(creditsyear.getFullYear());</script> <a class="ext-link" href="/"><b>SIZZLE</b></a> All Rights Reserved | Teky
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  </body>
+</html>
